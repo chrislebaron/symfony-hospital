@@ -26,6 +26,8 @@
         </tbody>
     </table>
 
+    {{ include('contact/new.html.twig') }}
+
     <a href="{{ path('hospital_index') }}">back to list</a>
 
     <a href="{{ path('hospital_edit', {'id': hospital.id}) }}">edit</a>

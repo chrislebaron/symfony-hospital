@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Contact;
 use App\Entity\Hospital;
+use App\Form\ContactType;
 use App\Form\HospitalType;
 use App\Repository\HospitalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +15,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/hospital")
- * @IsGranted("ROLE_ADMIN")
  */
 class HospitalController extends AbstractController
 {
@@ -29,6 +30,7 @@ class HospitalController extends AbstractController
 
     /**
      * @Route("/new", name="hospital_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -55,13 +57,22 @@ class HospitalController extends AbstractController
      */
     public function show(Hospital $hospital): Response
     {
+        // ADD THE CONTACT FORM TO THE HOSPITAL SHOW PAGE.
+        $contact = new Contact();
+        $form = $this->createForm(ContactType::class, $contact, [
+            'action' => $this->generateUrl('contact_new'),
+            'method' => 'POST',
+        ]);
+
         return $this->render('hospital/show.html.twig', [
             'hospital' => $hospital,
+            'form' => $form->createView()
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="hospital_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, Hospital $hospital): Response
     {
@@ -84,6 +95,7 @@ class HospitalController extends AbstractController
 
     /**
      * @Route("/{id}", name="hospital_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Hospital $hospital): Response
     {
