@@ -24,7 +24,9 @@
                 <td>{{ hospital.address }}</td>
                 <td>
                     <a href="{{ path('hospital_show', {'id': hospital.id}) }}">show</a>
-                    <a href="{{ path('hospital_edit', {'id': hospital.id}) }}">edit</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('hospital_edit', {'id': hospital.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
