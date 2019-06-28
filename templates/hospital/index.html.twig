@@ -3,22 +3,20 @@
 {% block title %}Hospital index{% endblock %}
 
 {% block body %}
-    <h1>Hospital index</h1>
+    <h1>Hospitals</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>PhoneNumber</th>
                 <th>Address</th>
-                <th>actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for hospital in hospitals %}
             <tr>
-                <td>{{ hospital.id }}</td>
                 <td>{{ hospital.name }}</td>
                 <td>{{ hospital.phoneNumber }}</td>
                 <td>{{ hospital.address }}</td>
@@ -37,5 +35,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('hospital_new') }}">Create new</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('hospital_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}
