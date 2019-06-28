@@ -59,6 +59,7 @@ class HospitalController extends AbstractController
     {
         // ADD THE CONTACT FORM TO THE HOSPITAL SHOW PAGE.
         $contact = new Contact();
+        $contact->setHospital($hospital);
         $form = $this->createForm(ContactType::class, $contact, [
             'action' => $this->generateUrl('contact_new'),
             'method' => 'POST',

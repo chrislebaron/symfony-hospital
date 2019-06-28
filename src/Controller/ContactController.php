@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/contact")
@@ -17,6 +18,7 @@ class ContactController extends AbstractController
 {
     /**
      * @Route("/", name="contact_index", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function index(ContactRepository $contactRepository): Response
     {
@@ -39,7 +41,7 @@ class ContactController extends AbstractController
             $entityManager->persist($contact);
             $entityManager->flush();
 
-            return $this->redirectToRoute('contact_index');
+            return $this->redirectToRoute('contact_thanks');
         }
 
         return $this->render('contact/new.html.twig', [
@@ -49,34 +51,21 @@ class ContactController extends AbstractController
     }
 
     /**
+     * @Route("/thank-you", name="contact_thanks", methods={"GET"})
+     */
+    public function thanks(Request $reqeust): Response
+    {
+        return $this->render('contact/thanks.html.twig');
+    }
+
+    /**
      * @Route("/{id}", name="contact_show", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function show(Contact $contact): Response
     {
         return $this->render('contact/show.html.twig', [
             'contact' => $contact,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="contact_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Contact $contact): Response
-    {
-        $form = $this->createForm(ContactType::class, $contact);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('contact_index', [
-                'id' => $contact->getId(),
-            ]);
-        }
-
-        return $this->render('contact/edit.html.twig', [
-            'contact' => $contact,
-            'form' => $form->createView(),
         ]);
     }
 
