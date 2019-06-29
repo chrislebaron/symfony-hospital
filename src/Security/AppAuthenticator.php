@@ -85,13 +85,10 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // SEND ADMINS TO HOSPITAL INDEX SO THEY CAN MANAGE THE HOSPITALS
-        if(in_array('ROLE_ADMIN', $token->getUser()->getRoles() )){
-            return new RedirectResponse($this->urlGenerator->generate('hospital_index'));
-        }
 
-        // SEND NORMAL USERS TO THE CONTACTS PAGE.
-        return new RedirectResponse($this->urlGenerator->generate('contact_index'));
+        return new RedirectResponse($this->urlGenerator->generate('hospital_index'));
+
+
     }
 
     protected function getLoginUrl()
